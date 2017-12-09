@@ -16,32 +16,33 @@ class ViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet var matrixView:UIView!;
     @IBOutlet var pathMadeAllTheWayThrough:UILabel!;
     @IBOutlet var pathCost:UILabel!;
-    @IBOutlet var pathValue:UIStackView!;
+    @IBOutlet var pathValue:UILabel!;
     
     var matrix:Matrix?;
-    
+    /*
+     Search for least cost path from matrix
+     */
     @IBAction func evaluateLeastCostPathInMatrix(button:UIButton) -> Void
     {
-        /*
-         *  Here we need to fork new thread and then find out the value. But as this happens only when there is high number of column ignoring for this excercise.
-         */
+        
         self.clearOutPut();
-       
-        let returnValue = matrix?.evaluateCostMatrixForMinimumCost();
-        pathMadeAllTheWayThrough.text = (returnValue?.completeMatrixPath)! ? "YES" : "NO";
-        guard let costOfPath:Int = returnValue?.costOfPath else{
-            return;
-        }
-        pathCost.text = "\(costOfPath)";
-        for i in (returnValue?.pathArray)!
-        {
-            let pathLabel:UILabel = UILabel();
-            pathLabel.text = "\(i)";
-            pathValue.addArrangedSubview(pathLabel);
-        }
+        
+        let returnValue:Output = (matrix?.evaluateCostMatrixForMinimumCost())!;
+        
+        
+        
+        
+        pathMadeAllTheWayThrough.text = (returnValue.completeMatrixPath) ? "All the way through the grid : YES" : "All the way through the grid: NO";
+        
+        
+        
+        pathCost.text = "Cost : \(returnValue.costOfPath)";
+        pathValue.text = "Path : [\(returnValue.pathArray.map{String($0)}.joined(separator: ","))]";
         
     }
-    
+    /*
+     Generate matrix based on supplied rows and columns
+     */
     @IBAction func generateMatrixButtonTapped(button:UIButton) -> Void
     {
         self.clearMatrix();
@@ -105,10 +106,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
     func clearOutPut()->Void {
         pathMadeAllTheWayThrough.text = nil;
         pathCost.text = nil;
-        for i in pathValue.arrangedSubviews
-        {
-            pathValue.removeArrangedSubview(i);
-        }
+        pathValue.text = nil;
     }
     
     func showAlert()
@@ -143,21 +141,24 @@ class ViewController: UIViewController,UITextFieldDelegate {
         matrix?.assignMatrixValueAt(row: row, column: column, cost: costInTextField);
         return true;
     }
+    
     override func viewDidLoad() {
         let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.viewTouched(_:)));
         self.view.addGestureRecognizer(tapGestureRecognizer);
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
     @objc func viewTouched(_ sender:UITapGestureRecognizer) -> Void {
         self.view.endEditing(true);
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
     
-
+    
+    
 }
 
