@@ -71,36 +71,46 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zip-gy-bIk">
                                 <rect key="frame" x="0.0" y="427" width="375" height="240"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="sMl-FE-N60">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sMl-FE-N60">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="240"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QIw-wq-l4n">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                                <rect key="frame" x="107.5" y="0.0" width="160" height="60"/>
                                                 <state key="normal" title="Search Least Cost Path"/>
                                                 <connections>
                                                     <action selector="evaluateLeastCostPathInMatrixWithButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="C0Y-N2-bOZ"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ftV-yb-M7C">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ftV-yb-M7C">
                                                 <rect key="frame" x="0.0" y="60" width="375" height="60"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TM4-fE-g4P">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TM4-fE-g4P">
                                                 <rect key="frame" x="0.0" y="120" width="375" height="60"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Aoi-Jl-nM6">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ofd-0v-MaN">
                                                 <rect key="frame" x="0.0" y="180" width="375" height="60"/>
-                                            </stackView>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="TM4-fE-g4P" firstAttribute="height" secondItem="Aoi-Jl-nM6" secondAttribute="height" id="6D2-yp-7K7"/>
-                                            <constraint firstItem="ftV-yb-M7C" firstAttribute="height" secondItem="Aoi-Jl-nM6" secondAttribute="height" id="D70-2l-aBz"/>
-                                            <constraint firstItem="ftV-yb-M7C" firstAttribute="height" secondItem="QIw-wq-l4n" secondAttribute="height" id="DFT-nl-ntC"/>
+                                            <constraint firstItem="ftV-yb-M7C" firstAttribute="top" secondItem="QIw-wq-l4n" secondAttribute="bottom" id="0Sw-hC-Fkt"/>
+                                            <constraint firstAttribute="trailing" secondItem="TM4-fE-g4P" secondAttribute="trailing" id="FDd-c5-YtP"/>
+                                            <constraint firstItem="TM4-fE-g4P" firstAttribute="leading" secondItem="sMl-FE-N60" secondAttribute="leading" id="H0c-yB-eb4"/>
+                                            <constraint firstItem="Ofd-0v-MaN" firstAttribute="leading" secondItem="sMl-FE-N60" secondAttribute="leading" id="JHi-J5-EWF"/>
+                                            <constraint firstItem="ftV-yb-M7C" firstAttribute="leading" secondItem="sMl-FE-N60" secondAttribute="leading" id="bIx-1H-Cpy"/>
+                                            <constraint firstAttribute="trailing" secondItem="Ofd-0v-MaN" secondAttribute="trailing" id="ndv-b5-Czs"/>
+                                            <constraint firstItem="Ofd-0v-MaN" firstAttribute="centerX" secondItem="sMl-FE-N60" secondAttribute="centerX" id="p90-Gt-Oht"/>
+                                            <constraint firstItem="TM4-fE-g4P" firstAttribute="top" secondItem="ftV-yb-M7C" secondAttribute="bottom" id="q7Y-Gc-dzC"/>
+                                            <constraint firstAttribute="trailing" secondItem="ftV-yb-M7C" secondAttribute="trailing" id="tfA-j2-D5y"/>
+                                            <constraint firstItem="Ofd-0v-MaN" firstAttribute="top" secondItem="TM4-fE-g4P" secondAttribute="bottom" id="z9l-sP-O0Q"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -134,7 +144,7 @@
                         <outlet property="matrixView" destination="dMh-1a-6Tb" id="j0s-uz-842"/>
                         <outlet property="pathCost" destination="TM4-fE-g4P" id="cAu-1j-iz0"/>
                         <outlet property="pathMadeAllTheWayThrough" destination="ftV-yb-M7C" id="0je-uT-DHt"/>
-                        <outlet property="pathValue" destination="Aoi-Jl-nM6" id="3sg-7h-et0"/>
+                        <outlet property="pathValue" destination="Ofd-0v-MaN" id="h5P-Dg-7eY"/>
                         <outlet property="rowTextField" destination="DHV-69-tVN" id="zxd-YB-x7D"/>
                     </connections>
                 </viewController>
