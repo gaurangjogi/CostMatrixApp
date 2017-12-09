@@ -234,9 +234,9 @@ open class Matrix {
                 
                 upperDignolReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
             }
-            /*
+                /*
                  If cost of path is not already computed then try to retrive it.
-             */
+                 */
             else{
                 upperDignolReturnValue = self.costOfPathWithStartingPath(outPutUntilNow:Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath+costOfUpperDignolPath, pathArray: upperDigonalPath),column: column+1);
             }

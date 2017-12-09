@@ -73,7 +73,7 @@ open class Output  {
                 minimumValueOfAllPath = lowerDigonal.costOfPath;
             }
         }
-
+        
         if(minimumValueOfAllPath == upperDigonal.costOfPath)
         {
             return upperDigonal;
