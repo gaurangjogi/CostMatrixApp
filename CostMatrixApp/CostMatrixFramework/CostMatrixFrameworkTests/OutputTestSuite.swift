@@ -27,7 +27,7 @@ class OutputTestSuite: XCTestCase {
         XCTAssert(testValue1.latestPath()==0,"The Supplied Output instanse has last path value as 0");
         let testValue2: Output = Output(completeMatrixPath: true, costOfPath: 10, pathArray: [1,2,3,1,2]);
         XCTAssert(testValue2.latestPath()==2,"The Supplied Output instanse has last path value as 2");
-
+        
     }
     func testOutputStaticFunctionForFindingLeastCostPath()
     {

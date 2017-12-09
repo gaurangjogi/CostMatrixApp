@@ -37,6 +37,7 @@ class MatrixTestSuite: XCTestCase {
         matrix.costArray = [[3,4,1,2,8,6],[6,1,8,2,7,4],[5,9,3,9,9,5],[8,4,1,3,2,6],[3,7,2,8,6,4]];
         var result = matrix.evaluateCostMatrixForMinimumCost();
         XCTAssert(result.completeMatrixPath == true && result.costOfPath == 16 && result.pathArray == [1,2,3,4,4,5], "The applied matrix path is complete and minimum Cost of path is 16");
+        
         matrix.costArray = [[3,4,1,2,8,6],[6,1,8,2,7,4],[5,9,3,9,9,5],[8,4,1,3,2,6],[3,7,2,1,2,3]];
         result = matrix.evaluateCostMatrixForMinimumCost();
         XCTAssert(result.completeMatrixPath == true && result.costOfPath == 11 && result.pathArray == [1,2,1,5,4,5], "The applied matrix path is complete and minimum Cost of path is 11");
@@ -65,7 +66,7 @@ class MatrixTestSuite: XCTestCase {
         let result = matrix.evaluateCostMatrixForMinimumCost();
         XCTAssert(result.completeMatrixPath == true && result.costOfPath == 3 && result.pathArray == [4], "The applied matrix path is complete with minimum cost of path is 3");
     }
-   
+    
     func testThreeCrossFiveCostMatrixWithStartingCostValueGreaterThen50()
     {
         let matrix:Matrix = Matrix(rows:3,columns:5);
