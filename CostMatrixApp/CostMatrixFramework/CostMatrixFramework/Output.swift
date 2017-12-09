@@ -13,6 +13,7 @@ open class Output  {
     public var completeMatrixPath:Bool;
     public var costOfPath:Int;
     public var pathArray:[Int];
+    
     init(completeMatrixPath:Bool,costOfPath:Int,pathArray:[Int]) {
         self.completeMatrixPath = completeMatrixPath;
         self.costOfPath = costOfPath;
@@ -72,7 +73,7 @@ open class Output  {
                 minimumValueOfAllPath = lowerDigonal.costOfPath;
             }
         }
-        
+
         if(minimumValueOfAllPath == upperDigonal.costOfPath)
         {
             return upperDigonal;
@@ -85,5 +86,15 @@ open class Output  {
         {
             return lowerDigonal;
         }
+    }
+    final func reducePreviousPath(column:Int,fromMatrix:[[Int]]) -> Output
+    {
+        let newPath:Output = Output(completeMatrixPath: self.completeMatrixPath, costOfPath: self.costOfPath, pathArray: self.pathArray);
+        for i in 0..<column
+        {
+            newPath.costOfPath = newPath.costOfPath - fromMatrix[self.pathArray[i]][i];
+            newPath.pathArray.remove(at: 0);
+        }
+        return newPath;
     }
 }

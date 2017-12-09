@@ -31,6 +31,9 @@ open class Matrix {
     /*
      initializer for creating the cost matrix
      */
+    
+    var alreadySearchedPath:[Output]?;
+    
     public init(rows:Int, columns:Int, maximumCostValueForPath:Int=50) {
         self.numberOfRows = rows;
         self.numberOfColumns = columns;
@@ -61,7 +64,7 @@ open class Matrix {
             }
         }
         var returnValue: Output;
-        if(costOfPoint > maximumCostValueForPath)
+        if(costOfPoint > self.maximumCostValueForPath)
         {
             returnValue = Output(completeMatrixPath: false, costOfPath: costOfPoint, pathArray: []);
         }
@@ -77,6 +80,7 @@ open class Matrix {
      */
     public final func evaluateCostMatrixForMinimumCost() -> Output {
         var returnValue: Output;
+        self.alreadySearchedPath = Array<Output>();
         if(self.numberOfColumns == 1)
         {
             returnValue = self.oneColumnMatrixEvalution();
@@ -134,6 +138,7 @@ open class Matrix {
                 }
             }
         }
+        
         /*
          As the return value contains array of Rows in the cost array whose index starts from zero we need to increase it by 1
          */
@@ -183,6 +188,28 @@ open class Matrix {
      */
     final func findAllThreePosiblePathFromCurrentPath(outputUntilNow:Output,column:Int) -> (upperDigonal:Output,sameLine:Output,lowerDigonal:Output)
     {
+        var upperFound:Output?=nil;
+        var middelFound:Output?=nil;
+        var lowerFound:Output?=nil;
+        /*
+         Check whether the cost of path is already computed and cached
+         */
+        for index in alreadySearchedPath!
+        {
+            if(index.pathArray.count > 0 && index.pathArray.first! == self.nextUpperDigonalPath(latestPathValue: outputUntilNow.latestPath()) && index.pathArray.count == self.numberOfColumns - column - 1)
+            {
+                upperFound = index;
+            }
+            else if(index.pathArray.count>0 && index.pathArray.first! == self.nextSameLinePath(latestPathValue: outputUntilNow.latestPath()) && index.pathArray.count == self.numberOfColumns - column - 1)
+            {
+                middelFound = index;
+            }
+            else if(index.pathArray.count>0 && index.pathArray.first! == self.nextLowerDigonalPath(latestPathValue: outputUntilNow.latestPath()) && index.pathArray.count == self.numberOfColumns - column - 1 )
+            {
+                lowerFound = index;
+            }
+        }
+        
         let latestPath = outputUntilNow.latestPath();
         let costOfUpperDignolPath = self.nextUpperDigonalCost(latestPathValue: latestPath, column: column);
         let costOfLowerDignolPath = self.nextLowerDigonalCost(latestPathValue: latestPath, column: column);
@@ -193,22 +220,43 @@ open class Matrix {
         var upperDignolReturnValue:Output;
         var sameLineReturnValue:Output;
         var lowerDigonalReturnValue:Output;
-        if((costOfUpperDignolPath + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
+        upperDigonalPath.append(self.nextUpperDigonalPath(latestPathValue: latestPath));
+        sameLinePath.append(self.nextSameLinePath(latestPathValue: latestPath));
+        lowerDigonalPath.append(self.nextLowerDigonalPath(latestPathValue: latestPath));
+        
+        if(upperFound == nil)
         {
-            
-            upperDignolReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
+            /*
+             If the cost of path is not already computed then first check whether it exceeds maximum cost or not
+             */
+            if((costOfUpperDignolPath + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
+            {
+                
+                upperDignolReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
+            }
+            /*
+                 If cost of path is not already computed then try to retrive it.
+             */
+            else{
+                upperDignolReturnValue = self.costOfPathWithStartingPath(outPutUntilNow:Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath+costOfUpperDignolPath, pathArray: upperDigonalPath),column: column+1);
+            }
         }
         else{
-            upperDigonalPath.append(self.nextUpperDigonalPath(latestPathValue: latestPath));
-            upperDignolReturnValue = self.costOfPathWithStartingPath(outPutUntilNow:Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath+costOfUpperDignolPath, pathArray: upperDigonalPath),column: column+1);
+            /*
+             If the cost of path is already computed then Just need to add the path. But before adding it we need to check whether it exceeds the maximum cost.
+             */
+            if(((upperFound?.costOfPath)! + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
+            {
+                upperDignolReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
+            }
+            else
+            {
+                upperDignolReturnValue = Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath + (upperFound?.costOfPath)!, pathArray: outputUntilNow.pathArray + (upperFound?.pathArray)!);
+            }
         }
-        if((costOfSameLinePath + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
+        
+        if(middelFound==nil)
         {
-            
-            sameLineReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
-        }
-        else{
-            sameLinePath.append(self.nextSameLinePath(latestPathValue: latestPath));
             if(upperDigonalPath == sameLinePath)
             {
                 /*
@@ -217,40 +265,73 @@ open class Matrix {
                 sameLineReturnValue = upperDignolReturnValue;
             }
             else{
-                
-                sameLineReturnValue = self.costOfPathWithStartingPath(outPutUntilNow:Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath+costOfSameLinePath, pathArray: sameLinePath),column: column+1);
+                if((costOfSameLinePath + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
+                {
+                    
+                    sameLineReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
+                }
+                else {
+                    sameLineReturnValue = self.costOfPathWithStartingPath(outPutUntilNow:Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath+costOfSameLinePath, pathArray: sameLinePath),column: column+1);
+                }
             }
         }
-        if((costOfLowerDignolPath + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
+        else
         {
-            
-            lowerDigonalReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
-        }
-        else{
-            lowerDigonalPath.append(self.nextLowerDigonalPath(latestPathValue: latestPath));
-            if(upperDigonalPath == sameLinePath && sameLinePath == lowerDigonalPath)
+            if(((middelFound?.costOfPath)! + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
             {
-                /*
-                 If all three paths are same then no need to find new value;  We can stop repeatative recursion by this.
-                 */
-                lowerDigonalReturnValue = upperDignolReturnValue;
+                sameLineReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
             }
-                /*
-                 If two path matches each other
-                 */
-            else if(sameLinePath == lowerDigonalPath)
+            else
+            {
+                sameLineReturnValue = Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath + (middelFound?.costOfPath)!, pathArray: outputUntilNow.pathArray + (middelFound?.pathArray)!);
+            }
+        }
+        if(lowerFound == nil)
+        {
+            if((costOfLowerDignolPath + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
             {
                 
-                lowerDigonalReturnValue = sameLineReturnValue;
-            }
-            else if(lowerDigonalPath == upperDigonalPath)
-            {
-                lowerDigonalReturnValue = upperDignolReturnValue;
+                lowerDigonalReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
             }
             else{
-                lowerDigonalReturnValue = self.costOfPathWithStartingPath(outPutUntilNow:Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath+costOfLowerDignolPath, pathArray: lowerDigonalPath),column: column+1);
+                if(upperDigonalPath == sameLinePath && sameLinePath == lowerDigonalPath)
+                {
+                    /*
+                     If all three paths are same then no need to find new value;  We can stop repeatative recursion by this.
+                     */
+                    lowerDigonalReturnValue = upperDignolReturnValue;
+                }
+                    /*
+                     If two path matches each other
+                     */
+                else if(sameLinePath == lowerDigonalPath)
+                {
+                    
+                    lowerDigonalReturnValue = sameLineReturnValue;
+                }
+                else if(lowerDigonalPath == upperDigonalPath)
+                {
+                    lowerDigonalReturnValue = upperDignolReturnValue;
+                }
+                else
+                {
+                    lowerDigonalReturnValue = self.costOfPathWithStartingPath(outPutUntilNow:Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath+costOfLowerDignolPath, pathArray: lowerDigonalPath),column: column+1);
+                }
             }
         }
+        else
+        {
+            if(((lowerFound?.costOfPath)! + outputUntilNow.costOfPath) >= self.maximumCostValueForPath)
+            {
+                lowerDigonalReturnValue = Output(completeMatrixPath: false, costOfPath: outputUntilNow.costOfPath, pathArray: outputUntilNow.pathArray);
+            }
+            else
+            {
+                lowerDigonalReturnValue = Output(completeMatrixPath: true, costOfPath: outputUntilNow.costOfPath + (lowerFound?.costOfPath)!, pathArray: outputUntilNow.pathArray + (lowerFound?.pathArray)!);
+            }
+        }
+        
+        
         return (upperDignolReturnValue,sameLineReturnValue,lowerDigonalReturnValue);
     }
     /*
@@ -262,7 +343,9 @@ open class Matrix {
     final func costOfPathWithStartingPath(outPutUntilNow:Output,column:Int) -> Output
     {
         var returnValue: Output;
+        
         let latestPath = outPutUntilNow.latestPath();
+        
         if(column == 0 && self.costArray[latestPath][0] > self.maximumCostValueForPath)
         {
             returnValue = Output(completeMatrixPath: false, costOfPath: 0, pathArray: []);
@@ -279,10 +362,14 @@ open class Matrix {
         else{
             
             
-            let allThreePaths:(upperDigonal:Output,sameLine:Output,lowerDigonal:Output) = self.findAllThreePosiblePathFromCurrentPath(outputUntilNow: outPutUntilNow, column: column)
+            
+            let allThreePaths:(upperDigonal:Output,sameLine:Output,lowerDigonal:Output) = self.findAllThreePosiblePathFromCurrentPath(outputUntilNow: outPutUntilNow, column: column);
             
             returnValue = Output.chooseLeastCostPathWithMiximumTraversedPoint(upperDigonal: allThreePaths.upperDigonal, sameLine: allThreePaths.sameLine, lowerDigonal: allThreePaths.lowerDigonal);
-            
+            /*
+             caching the minimum cost of path already computed so that if the program encounters the same point it can use this already computed result.
+             */
+            alreadySearchedPath?.append( returnValue.reducePreviousPath(column: column, fromMatrix: self.costArray));
         }
         return returnValue;
     }
