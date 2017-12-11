@@ -107,7 +107,7 @@ open class Matrix {
         {
            let tempCost = costOfPath + self.costArray[i][j]
             j = j + 1
-            if(tempCost > self.maximumCostValueForPath)
+            if(tempCost >= self.maximumCostValueForPath)
             {
                 returnValue = Output(completeMatrixPath: false, costOfPath: costOfPath, pathArray:path)
                 break
