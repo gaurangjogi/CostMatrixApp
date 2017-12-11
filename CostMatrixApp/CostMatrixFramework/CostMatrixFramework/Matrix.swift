@@ -279,9 +279,8 @@ open class Matrix {
     }
     /*
      This method identifies the minumum cost path from starting row and using recursion.
-     With two break points
-     1. When the first column value of any row is greater then maximum cost value for path
-     2. When column value reaches the numberOfColumns in matrix
+     With  break point as below
+     -- When column value reaches the numberOfColumns in matrix
      */
     final func costOfPathWithStartingPath(outPutUntilNow:Output,column:Int) -> Output
     {
