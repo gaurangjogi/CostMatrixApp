@@ -10,24 +10,24 @@ import UIKit
 
 open class Output  {
     
-    public var completeMatrixPath:Bool;
-    public var costOfPath:Int;
-    public var pathArray:[Int];
+    public var completeMatrixPath:Bool
+    public var costOfPath:Int
+    public var pathArray:[Int]
     
     init(completeMatrixPath:Bool,costOfPath:Int,pathArray:[Int]) {
-        self.completeMatrixPath = completeMatrixPath;
-        self.costOfPath = costOfPath;
-        self.pathArray = pathArray;
+        self.completeMatrixPath = completeMatrixPath
+        self.costOfPath = costOfPath
+        self.pathArray = pathArray
     }
     final func latestPath () -> Int
     {
         if(self.pathArray.count == 0)
         {
-            return -1;
+            return -1
         }
         else
         {
-            return self.pathArray.last!;
+            return self.pathArray.last!
         }
     }
     
@@ -36,65 +36,29 @@ open class Output  {
      */
     static func chooseLeastCostPathWithMiximumTraversedPoint(upperDigonal:Output,sameLine:Output,lowerDigonal:Output) -> Output
     {
-        var minimumValueOfAllPath = Swift.min(upperDigonal.completeMatrixPath==true ? upperDigonal.costOfPath : Int.max ,lowerDigonal.completeMatrixPath == true ? lowerDigonal.costOfPath : Int.max ,sameLine.completeMatrixPath == true ? sameLine.costOfPath : Int.max);
-        
-        /*
-         If all the paths are not complete path then we need to choose the path which has maximum number of points traversed and minimum cost path value.
-         */
-        if(upperDigonal.completeMatrixPath == false && sameLine.completeMatrixPath == false && lowerDigonal.completeMatrixPath == false )
-        {
-            if(upperDigonal.pathArray.count == sameLine.pathArray.count && sameLine.pathArray.count == lowerDigonal.pathArray.count)
-            {
-                minimumValueOfAllPath = Swift.min(upperDigonal.costOfPath,lowerDigonal.costOfPath,sameLine.costOfPath)
-            }
-            else if(upperDigonal.pathArray.count == sameLine.pathArray.count && sameLine.pathArray.count > lowerDigonal.pathArray.count)
-            {
-                minimumValueOfAllPath = Swift.min(upperDigonal.costOfPath,sameLine.costOfPath)
-            }
-            else if(sameLine.pathArray.count == lowerDigonal.pathArray.count && lowerDigonal.pathArray.count > upperDigonal.pathArray.count)
-            {
-                minimumValueOfAllPath = Swift.min(lowerDigonal.costOfPath,sameLine.costOfPath)
-                
-            }
-            else if(lowerDigonal.pathArray.count == upperDigonal.pathArray.count && upperDigonal.pathArray.count > sameLine.pathArray.count)
-            {
-                minimumValueOfAllPath = Swift.min(lowerDigonal.costOfPath,upperDigonal.costOfPath)
-            }
-            else if(upperDigonal.pathArray.count > sameLine.pathArray.count && upperDigonal.pathArray.count > lowerDigonal.pathArray.count)
-            {
-                minimumValueOfAllPath = upperDigonal.costOfPath;
-            }
-            else if(sameLine.pathArray.count > lowerDigonal.pathArray.count && sameLine.pathArray.count > upperDigonal.pathArray.count)
-            {
-                minimumValueOfAllPath = sameLine.costOfPath;
-            }
-            else if(lowerDigonal.pathArray.count > sameLine.pathArray.count && lowerDigonal.pathArray.count > upperDigonal.pathArray.count)
-            {
-                minimumValueOfAllPath = lowerDigonal.costOfPath;
-            }
-        }
-        
+
+        let minimumValueOfAllPath =  Swift.min(upperDigonal.costOfPath,sameLine.costOfPath, lowerDigonal.costOfPath)
         if(minimumValueOfAllPath == upperDigonal.costOfPath)
         {
-            return upperDigonal;
+            return upperDigonal
         }
         else if(minimumValueOfAllPath == sameLine.costOfPath)
         {
-            return sameLine;
+            return sameLine
         }
         else
         {
-            return lowerDigonal;
+            return lowerDigonal
         }
     }
     final func reducePreviousPath(column:Int,fromMatrix:[[Int]]) -> Output
     {
-        let newPath:Output = Output(completeMatrixPath: self.completeMatrixPath, costOfPath: self.costOfPath, pathArray: self.pathArray);
+        let newPath:Output = Output(completeMatrixPath: self.completeMatrixPath, costOfPath: self.costOfPath, pathArray: self.pathArray)
         for i in 0..<column
         {
-            newPath.costOfPath = newPath.costOfPath - fromMatrix[self.pathArray[i]][i];
-            newPath.pathArray.remove(at: 0);
+            newPath.costOfPath = newPath.costOfPath - fromMatrix[self.pathArray[i]][i]
+            newPath.pathArray.remove(at: 0)
         }
-        return newPath;
+        return newPath
     }
 }
